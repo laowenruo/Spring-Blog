@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mashiro.mapper.UserMapper">
+
+    <!--查询用户(用于前台登录验证)-->
+    <select id="findUserByUsername" resultType="cn.isbut.entity.User">
+        select * from tb_user
+        where username = #{username}
+    </select>
+
+    <!--获取博主信息-->
+    <select id="getUserInfo" resultType="cn.isbut.entity.User">
+        select nickname,avatar
+        from tb_user
+        where id = #{id}
+    </select>
+
+
+</mapper>

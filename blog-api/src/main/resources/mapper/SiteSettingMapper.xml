@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mashiro.mapper.SiteSettingMapper">
+
+    <!--添加-->
+    <insert id="saveSiteSetting" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_site_setting (name_en, name_zh, value, type) values (#{nameEn}, #{nameZh}, #{value}, #{type})
+    </insert>
+    
+    <delete id="deleteSiteSettingById">
+        delete from tb_site_setting where id = #{id}
+    </delete>
+    
+    <update id="updateSiteSetting" parameterType="cn.isbut.entity.SiteSetting">
+        update tb_site_setting
+        set value = #{value}
+        where id = #{id};
+    </update>
+
+    <select id="getWebTitleSuffix" resultType="java.lang.String">
+        select value from tb_site_setting where name_en='webTitleSuffix'
+    </select>
+
+    <select id="getSiteSettingList" resultType="cn.isbut.entity.SiteSetting">
+        select * from tb_site_setting
+    </select>
+    
+    
+
+</mapper>

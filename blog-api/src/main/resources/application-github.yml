@@ -1,0 +1,80 @@
+# 部署上线需要修改为服务器ip，cms对应后台管理端口，website对应前台端口，
+# 如有域名则改为例如(http://admin.mashiro.org.cn、http://mashiro.org.cn)
+# 用于邮件模版中的链接
+custom:
+  mail:
+    blog:
+      name: Mashiro's Blog
+    url:
+      cms: http://localhost:8082
+      website: http://localhost:8081
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/blog_dev?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    username: #数据库用户名
+    password: #数据库密码
+  thymeleaf:
+    cache: false
+    prefix:
+      classpath: /templates
+  redis:
+    host: #Redis主机ip
+    port: #redis端口号
+    #Redis数据库索引
+    database: 0
+    #连接超时时间
+    timeout: 1800000
+    #连接池最大连接数（使用负值表示没有限制）
+    lettuce:
+      pool:
+        max-active: 20
+        #最大阻塞等待时间（负值表示没有限制）
+        max-wait: -1
+        #连接池中最大空闲连接
+        max-idle: 5
+        #连接池中最小空闲连接
+        min-idle: 0
+    password: #redis密码
+  mail:
+    host: smtp.qq.com
+    protocol: smtp
+    default-encoding: UTF-8
+    username: #qq邮箱
+    password: #qq邮箱授权码
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+mybatis-plus:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.mashiro.entity
+  #开启驼峰命名
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+logging:
+  level:
+    root: info
+    com.shili: debug
+  file:
+    path: log/blog-dev
+server:
+  port: 8080
+comment:
+  avatar: http://img.mashiro.org.cn/nullavatar.jpg
+
+token:
+  expireTime: 100000000
+  secretKey: qweroijasogj

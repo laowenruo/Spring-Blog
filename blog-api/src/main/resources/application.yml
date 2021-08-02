@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: github
+    #建议修改为自己的
+
+

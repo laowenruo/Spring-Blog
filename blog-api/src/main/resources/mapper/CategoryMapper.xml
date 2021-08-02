@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mashiro.mapper.CategoryMapper">
+
+    <resultMap id="category" type="cn.isbut.entity.Category">
+        <id property="id" column="id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <!--新增分类-->
+    <insert id="saveCategory" parameterType="cn.isbut.entity.Category" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_category(category_name) values (#{name})
+    </insert>
+
+    <!--根据id获取分类-->
+    <select id="getCategoryById" resultMap="category">
+        select id,category_name from tb_category where id = #{id}
+    </select>
+
+    <!--根据名称来查询-->
+    <select id="getTypeByName" resultMap="category">
+        select * from tb_category where category_name = #{name}
+    </select>
+
+    <!--获取所有分类，生成List-->
+    <select id="getCategoryList" resultMap="category">
+        select * from tb_category order by id desc
+    </select>
+
+    <!--获取所有分类List不查询id-->
+    <select id="getCategoryNameList" resultMap="category">
+        select category_name from tb_category order by id desc
+    </select>
+
+    <!--查询分类下的所有博客-->
+    <select id="getCategoryBlogList" resultType="cn.isbut.entity.Category">
+        select c.id tid, c.name, b.id bid, b.title, b.category_id
+        from tb_category c, tb_blog b
+        where c.id = b.category_id
+    </select>
+
+    <!--更新修改分类-->
+    <update id="updateCategory" parameterType="cn.isbut.entity.Tag">
+        update tb_category set category_name = #{name} where id = #{id}
+    </update>
+
+    <!--根据id删除分类-->
+    <delete id="deleteCategoryById">
+        delete from tb_category where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mashiro.mapper.TagMapper">
+
+    <resultMap id="tag" type="cn.isbut.entity.Tag">
+        <id property="id" column="id"/>
+        <result property="name" column="tag_name"/>
+    </resultMap>
+
+    <resultMap id="tagBlogCount" type="cn.isbut.vo.TagBlogCountVO">
+        <id property="id" column="tag_id"/>
+        <result property="value" column="blog_count"/>
+    </resultMap>
+    
+    <!--新增标签-->
+    <insert id="saveTag" parameterType="cn.isbut.entity.Tag" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_tag(tag_name) values (#{name})
+    </insert>
+
+    <!--根据id获取标签-->
+    <select id="getTagById" resultMap="tag">
+        select id,tag_name from tb_tag where id = #{id}
+    </select>
+
+    <!--根据名称来标签-->
+    <select id="getTagByName" resultMap="tag">
+        select * from tb_tag where tag_name = #{name}
+    </select>
+
+    <!--查询所有标签-->
+    <select id="getTagList" resultMap="tag">
+        select * from tb_tag order by id desc
+    </select>
+
+    <!--查询标签下的所有博客-->
+    <select id="getTagBlogList" resultType="cn.isbut.entity.Tag">
+        select t.id tid, t.name, b.id bid, b.title
+        from tb_tag t, tb_blog b, tb_blog_tags bt
+        where t.id = bt.tag_id and b.id = bt.blog_id
+    </select>
+
+    <!--更新修改标签-->
+    <update id="updateTag">
+        update tb_tag set tag_name = #{name} where id = #{id}
+    </update>
+
+    <!--根据id删除标签-->
+    <delete id="deleteTagById">
+        delete from tb_tag where id = #{id}
+    </delete>
+
+    <!--查询每个标签的博客数量-->
+    <select id="getTagBlogCount" resultMap="tagBlogCount">
+        select tag_id, count(tag_id) as blog_count from tb_blog_tags group by tag_id
+    </select>
+
+    <!--获取所有标签List不查询id-->
+    <select id="getTagListNotId" resultMap="tag">
+        select tag_name from tb_tag order by id desc
+    </select>
+
+    <!--按博客id查询List-->
+    <select id="getTagListByBlogId" resultMap="tag">
+        select t.tag_name
+        from tb_blog_tags as bt left join tb_tag as t on bt.tag_id=t.id
+        where bt.blog_id=#{blogId}
+    </select>
+
+</mapper>
