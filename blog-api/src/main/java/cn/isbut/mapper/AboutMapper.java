@@ -16,21 +16,21 @@ import java.util.List;
 public interface AboutMapper {
 	/**
 	 * 查询关于我设置
-	 * @return
+	 * @return 设置列表
 	 */
 	List<About> getList();
 
 	/**
 	 * 更新
-	 * @param nameEn
-	 * @param value
-	 * @return
+	 * @param nameEn  名称
+	 * @param value 值
+	 * @return 成功与否
 	 */
 	int updateAbout(String nameEn, String value);
 
 	/**
 	 * 查询关于我页面评论开关状态
-	 * @return
+	 * @return 状态
 	 */
 	String getAboutCommentEnabled();
 }

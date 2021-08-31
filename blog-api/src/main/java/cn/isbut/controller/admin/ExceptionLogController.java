@@ -20,7 +20,7 @@ import cn.isbut.service.ExceptionLogService;
 @RestController
 @RequestMapping("/admin")
 public class ExceptionLogController {
-	@Autowired
+
 	ExceptionLogService exceptionLogService;
 
 	/**
@@ -29,13 +29,14 @@ public class ExceptionLogController {
 	 * @param date     按操作时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/exceptionLogs")
 	public Result exceptionLogs(@RequestParam(defaultValue = "") String[] date,
 	                            @RequestParam(defaultValue = "1") Integer pageNum,
 	                            @RequestParam(defaultValue = "10") Integer pageSize) {
-		String startDate = null;
+		String startDate;
+		startDate = null;
 		String endDate = null;
 		if (date.length == 2) {
 			startDate = date[0];
@@ -51,11 +52,16 @@ public class ExceptionLogController {
 	 * 按id删除异常日志
 	 *
 	 * @param id 日志id
-	 * @return
+	 * @return result
 	 */
 	@DeleteMapping("/exceptionLog")
 	public Result delete(@RequestParam Integer id) {
 		exceptionLogService.deleteExceptionLogById(id);
 		return Result.ok("删除成功");
+	}
+
+	@Autowired
+	public void setExceptionLogService(ExceptionLogService exceptionLogService) {
+		this.exceptionLogService = exceptionLogService;
 	}
 }

@@ -17,7 +17,7 @@ import cn.isbut.service.BlogService;
  */
 @RestController
 public class CategoryController {
-	@Autowired
+
 	BlogService blogService;
 
 	/**
@@ -25,7 +25,7 @@ public class CategoryController {
 	 *
 	 * @param categoryName 分类name
 	 * @param pageNum      页码
-	 * @return
+	 * @return result
 	 */
 	@VisitLogger(behavior = "查看分类")
 	@GetMapping("/category")
@@ -33,5 +33,10 @@ public class CategoryController {
 	                       @RequestParam(defaultValue = "1") Integer pageNum) {
 		PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByCategoryNameAndIsPublished(categoryName, pageNum);
 		return Result.ok("请求成功", pageResult);
+	}
+
+	@Autowired
+	public void setBlogService(BlogService blogService) {
+		this.blogService = blogService;
 	}
 }

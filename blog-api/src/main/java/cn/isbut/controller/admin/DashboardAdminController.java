@@ -1,17 +1,16 @@
 package cn.isbut.controller.admin;
 
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.isbut.config.RedisKeyConfig;
-import cn.isbut.entity.CityVisitor;
 import cn.isbut.model.vo.Result;
 import cn.isbut.service.DashboardService;
 import cn.isbut.service.RedisService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,9 +21,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 public class DashboardAdminController {
-	@Autowired
+
 	DashboardService dashboardService;
-	@Autowired
+
 	RedisService redisService;
 
 	@GetMapping("/dashboard")
@@ -33,12 +32,12 @@ public class DashboardAdminController {
 		int todayUV = redisService.countBySet(RedisKeyConfig.IDENTIFICATION_SET);
 		int blogCount = dashboardService.getBlogCount();
 		int commentCount = dashboardService.getCommentCount();
-		Map<String, List> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
-		Map<String, List> tagBlogCountMap = dashboardService.getTagBlogCountMap();
-		Map<String, List> visitRecordMap = dashboardService.getVisitRecordMap();
-		List<CityVisitor> cityVisitorList = dashboardService.getCityVisitorList();
+		var categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
+		var tagBlogCountMap = dashboardService.getTagBlogCountMap();
+		var visitRecordMap = dashboardService.getVisitRecordMap();
+		var cityVisitorList = dashboardService.getCityVisitorList();
 
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(8);
 		map.put("pv", todayPV);
 		map.put("uv", todayUV);
 		map.put("blogCount", blogCount);
@@ -48,5 +47,15 @@ public class DashboardAdminController {
 		map.put("visitRecord", visitRecordMap);
 		map.put("cityVisitor", cityVisitorList);
 		return Result.ok("获取成功", map);
+	}
+
+	@Autowired
+	public void setDashboardService(DashboardService dashboardService) {
+		this.dashboardService = dashboardService;
+	}
+
+	@Autowired
+	public void setRedisService(RedisService redisService) {
+		this.redisService = redisService;
 	}
 }

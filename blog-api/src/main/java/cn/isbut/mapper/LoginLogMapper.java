@@ -16,23 +16,23 @@ import java.util.List;
 public interface LoginLogMapper {
 	/**
 	 * 查询日志
-	 * @param startDate
-	 * @param endDate
-	 * @return
+	 * @param startDate 开始日期
+	 * @param endDate 结束日期
+	 * @return 登录日志
 	 */
 	List<LoginLog> getLoginLogListByDate(String startDate, String endDate);
 
 	/**
 	 * 添加日志
-	 * @param log
-	 * @return
+	 * @param log 日志
+	 * @return 成功与否状态
 	 */
 	int saveLoginLog(LoginLog log);
 
 	/**
 	 * 删除日志
-	 * @param id
-	 * @return
+	 * @param id 日志id
+	 * @return 成功与否状态
 	 */
 	int deleteLoginLogById(Integer id);
 }

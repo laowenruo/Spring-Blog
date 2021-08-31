@@ -29,16 +29,16 @@ import java.util.List;
  */
 @RestController
 public class BlogController {
-	@Autowired
+
 	BlogService blogService;
-	@Autowired
+
 	UserServiceImpl userService;
 
 	/**
 	 * 按置顶、创建时间排序 分页查询博客简要信息列表
 	 *
 	 * @param pageNum 页码
-	 * @return
+	 * @return result
 	 */
 	@VisitLogger(behavior = "访问页面", content = "首页")
 	@GetMapping("/blogs")
@@ -52,11 +52,11 @@ public class BlogController {
 	 *
 	 * @param id  博客id
 	 * @param jwt 密码保护文章的访问Token
-	 * @return
+	 * @return result
 	 */
 	@VisitLogger(behavior = "查看博客")
 	@GetMapping("/blog")
-	public Result getBlog(@RequestParam Long id,
+	public Result getBlog(@RequestParam Integer id,
 	                      @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
 		BlogDetail blog = blogService.getBlogByIdAndIsPublished(id);
 		//对密码保护的文章校验Token
@@ -96,7 +96,7 @@ public class BlogController {
 	 * 校验受保护文章密码是否正确，正确则返回jwt
 	 *
 	 * @param blogPassword 博客id、密码
-	 * @return
+	 * @return result
 	 */
 	@VisitLogger(behavior = "校验博客密码")
 	@PostMapping("/checkBlogPassword")
@@ -115,7 +115,7 @@ public class BlogController {
 	 * 按关键字根据文章内容搜索公开且无密码保护的博客文章
 	 *
 	 * @param query 关键字字符串
-	 * @return
+	 * @return result
 	 */
 	@VisitLogger(behavior = "搜索博客")
 	@GetMapping("/searchBlog")
@@ -126,5 +126,15 @@ public class BlogController {
 		}
 		List<SearchBlog> searchBlogs = blogService.getSearchBlogListByQueryAndIsPublished(query.trim());
 		return Result.ok("获取成功", searchBlogs);
+	}
+
+	@Autowired
+	public void setBlogService(BlogService blogService) {
+		this.blogService = blogService;
+	}
+
+	@Autowired
+	public void setUserService(UserServiceImpl userService) {
+		this.userService = userService;
 	}
 }

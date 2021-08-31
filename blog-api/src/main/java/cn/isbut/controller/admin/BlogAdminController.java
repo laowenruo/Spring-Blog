@@ -38,13 +38,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 public class BlogAdminController {
-	@Autowired
+
 	BlogService blogService;
-	@Autowired
+
 	CategoryService categoryService;
-	@Autowired
+
 	TagService tagService;
-	@Autowired
+
 	CommentService commentService;
 
 	/**
@@ -54,7 +54,7 @@ public class BlogAdminController {
 	 * @param categoryId 按分类id查询
 	 * @param pageNum    页码
 	 * @param pageSize   每页个数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/blogs")
 	public Result blogs(@RequestParam(defaultValue = "") String title,
@@ -65,7 +65,7 @@ public class BlogAdminController {
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<cn.isbut.entity.Blog> pageInfo = new PageInfo<>(blogService.getListByTitleAndCategoryId(title, categoryId));
 		List<Category> categories = categoryService.getCategoryList();
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(2);
 		map.put("blogs", pageInfo);
 		map.put("categories", categories);
 		return Result.ok("请求成功", map);
@@ -75,7 +75,7 @@ public class BlogAdminController {
 	 * 删除博客文章、删除博客文章下的所有评论、同时维护 blog_tag 表
 	 *
 	 * @param id 文章id
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("删除博客")
 	@DeleteMapping("/blog")
@@ -89,13 +89,13 @@ public class BlogAdminController {
 	/**
 	 * 获取分类列表和标签列表
 	 *
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/categoryAndTag")
 	public Result categoryAndTag() {
 		List<Category> categories = categoryService.getCategoryList();
 		List<Tag> tags = tagService.getTagList();
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(2);
 		map.put("categories", categories);
 		map.put("tags", tags);
 		return Result.ok("请求成功", map);
@@ -106,7 +106,7 @@ public class BlogAdminController {
 	 *
 	 * @param id  博客id
 	 * @param top 是否置顶
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新博客置顶状态")
 	@PutMapping("/blog/top")
@@ -120,7 +120,7 @@ public class BlogAdminController {
 	 *
 	 * @param id        博客id
 	 * @param recommend 是否推荐
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新博客推荐状态")
 	@PutMapping("/blog/recommend")
@@ -134,7 +134,7 @@ public class BlogAdminController {
 	 *
 	 * @param id             博客id
 	 * @param blogVisibility 博客可见性DTO
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新博客可见性状态")
 	@PutMapping("blog/{id}/visibility")
@@ -147,7 +147,7 @@ public class BlogAdminController {
 	 * 按id获取博客详情
 	 *
 	 * @param id 博客id
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/blog")
 	public Result getBlog(@RequestParam Integer id) {
@@ -159,7 +159,7 @@ public class BlogAdminController {
 	 * 保存草稿或发布新文章
 	 *
 	 * @param blog 博客文章DTO
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("发布博客")
 	@PostMapping("/blog")
@@ -171,7 +171,7 @@ public class BlogAdminController {
 	 * 更新博客
 	 *
 	 * @param blog 博客文章DTO
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新博客")
 	@PutMapping("/blog")
@@ -184,7 +184,7 @@ public class BlogAdminController {
 	 *
 	 * @param blog 博客文章DTO
 	 * @param type 添加或更新
-	 * @return
+	 * @return result
 	 */
 	private Result getResult(Blog blog, String type) {
 		//验证普通字段
@@ -273,5 +273,25 @@ public class BlogAdminController {
 			}
 			return Result.ok("更新成功");
 		}
+	}
+
+	@Autowired
+	public void setBlogService(BlogService blogService) {
+		this.blogService = blogService;
+	}
+
+	@Autowired
+	public void setCategoryService(CategoryService categoryService) {
+		this.categoryService = categoryService;
+	}
+
+	@Autowired
+	public void setTagService(TagService tagService) {
+		this.tagService = tagService;
+	}
+
+	@Autowired
+	public void setCommentService(CommentService commentService) {
+		this.commentService = commentService;
 	}
 }

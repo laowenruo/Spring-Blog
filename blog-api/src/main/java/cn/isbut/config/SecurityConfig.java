@@ -19,11 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
+
     UserServiceImpl userService;
-	@Autowired
-    LoginLogService loginLogService;
-	@Autowired
+
+	LoginLogService loginLogService;
+
 	MyAuthenticationEntryPoint myAuthenticationEntryPoint;
 
 	@Bean
@@ -59,5 +59,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
 				//未登录时，返回json，在前端执行重定向
 				.exceptionHandling().authenticationEntryPoint(myAuthenticationEntryPoint);
+	}
+
+	@Autowired
+	public void setUserService(UserServiceImpl userService) {
+		this.userService = userService;
+	}
+
+	@Autowired
+	public void setLoginLogService(LoginLogService loginLogService) {
+		this.loginLogService = loginLogService;
+	}
+
+	@Autowired
+	public void setMyAuthenticationEntryPoint(MyAuthenticationEntryPoint myAuthenticationEntryPoint) {
+		this.myAuthenticationEntryPoint = myAuthenticationEntryPoint;
 	}
 }

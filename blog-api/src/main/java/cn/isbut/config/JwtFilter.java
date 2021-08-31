@@ -30,8 +30,8 @@ public class JwtFilter extends GenericFilterBean {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		//后台管理路径外的请求直接跳过
-		if (!request.getRequestURI().startsWith("/admin")) {
+		// 对于后台管理路径外的请求直接跳过
+		if (!"/admin".startsWith(request.getRequestURI())) {
 			filterChain.doFilter(request, servletResponse);
 			return;
 		}

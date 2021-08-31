@@ -16,14 +16,14 @@ import java.util.List;
 public interface CityVisitorMapper {
 	/**
 	 * 查询城市访客数
-	 * @return
+	 * @return 城市访客
 	 */
 	List<CityVisitor> getCityVisitorList();
 
 	/**
 	 * 保存城市访客
-	 * @param cityVisitor
-	 * @return
+	 * @param cityVisitor 城市访客
+	 * @return 成功与否状态
 	 */
 	int saveCityVisitor(CityVisitor cityVisitor);
 }

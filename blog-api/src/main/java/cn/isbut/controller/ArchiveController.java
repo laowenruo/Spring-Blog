@@ -22,7 +22,7 @@ public class ArchiveController {
 	/**
 	 * 按年月分组归档公开博客 统计公开博客总数
 	 *
-	 * @return
+	 * @return result
 	 */
 	@VisitLogger(behavior = "访问页面", content = "文章归档")
 	@GetMapping("/archives")

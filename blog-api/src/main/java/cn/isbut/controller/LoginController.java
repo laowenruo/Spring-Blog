@@ -20,7 +20,6 @@ import java.util.Map;
 @RestController
 public class LoginController {
 
-	@Autowired
 	UserService userService;
 
 	/**
@@ -37,9 +36,14 @@ public class LoginController {
 		}
 		user.setPassword(null);
 		String jwt = JwtUtils.generateToken("admin:" + user.getUsername());
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(2);
 		map.put("user", user);
 		map.put("token", jwt);
 		return Result.ok("登录成功", map);
+	}
+
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 }

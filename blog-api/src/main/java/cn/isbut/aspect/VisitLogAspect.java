@@ -24,10 +24,7 @@ import cn.isbut.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Ryan
@@ -37,13 +34,10 @@ import java.util.UUID;
 @Aspect
 public class VisitLogAspect {
 
-	@Autowired
     VisitLogService visitLogService;
 
-	@Autowired
-    VisitorService visitorService;
+	VisitorService visitorService;
 
-	@Autowired
     RedisService redisService;
 
 	ThreadLocal<Long> currentTime = new ThreadLocal<>();
@@ -58,18 +52,18 @@ public class VisitLogAspect {
 	/**
 	 * 配置环绕通知
 	 *
-	 * @param joinPoint
-	 * @return
-	 * @throws Throwable
+	 * @param joinPoint 对象
+	 * @return 结果
+	 * @throws Throwable 异常
 	 */
-	@Around("logPointcut(visitLogger)")
+	@Around(value = "logPointcut(visitLogger)", argNames = "joinPoint,visitLogger")
 	public Object logAround(ProceedingJoinPoint joinPoint, VisitLogger visitLogger) throws Throwable {
 		currentTime.set(System.currentTimeMillis());
 		Object result = joinPoint.proceed();
 		int times = (int) (System.currentTimeMillis() - currentTime.get());
 		currentTime.remove();
 		//获取请求对象
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 		//校验访客标识码
 		String identification = checkIdentification(request);
 		//记录访问日志
@@ -81,8 +75,8 @@ public class VisitLogAspect {
 	/**
 	 * 校验访客标识码
 	 *
-	 * @param request
-	 * @return
+	 * @param request 获取请求域
+	 * @return 访客标识码
 	 */
 	private String checkIdentification(HttpServletRequest request) {
 		String identification = request.getHeader("identification");
@@ -111,12 +105,12 @@ public class VisitLogAspect {
 	/**
 	 * 签发UUID，并保存至数据库和Redis
 	 *
-	 * @param request
-	 * @return
+	 * @param request 请求域
+	 * @return 访客标识码
 	 */
 	private String saveUUID(HttpServletRequest request) {
 		//获取响应对象
-		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+		HttpServletResponse response = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
 		//获取当前时间戳，精确到小时，防刷访客数据
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.MINUTE, 0);
@@ -129,6 +123,7 @@ public class VisitLogAspect {
 		String nameUUID = timestamp + ip + userAgent;
 		String uuid = UUID.nameUUIDFromBytes(nameUUID.getBytes()).toString();
 		//添加访客标识码UUID至响应头
+		assert response != null;
 		response.addHeader("identification", uuid);
 		//暴露自定义header供页面资源使用
 		response.addHeader("Access-Control-Expose-Headers", "identification");
@@ -147,11 +142,11 @@ public class VisitLogAspect {
 	/**
 	 * 设置VisitLogger对象属性
 	 *
-	 * @param joinPoint
-	 * @param visitLogger
-	 * @param result
-	 * @param times
-	 * @return
+	 * @param joinPoint 对象
+	 * @param visitLogger 访问注解
+	 * @param result 结果
+	 * @param times 耗时
+	 * @return 访问日志
 	 */
 	private VisitLog handleLog(ProceedingJoinPoint joinPoint, VisitLogger visitLogger, HttpServletRequest request, Object result,
 	                           int times, String identification) {
@@ -171,11 +166,11 @@ public class VisitLogAspect {
 	/**
 	 * 根据访问行为，设置对应的访问内容或备注
 	 *
-	 * @param behavior
-	 * @param content
-	 * @param requestParams
-	 * @param result
-	 * @return
+	 * @param behavior 行为
+	 * @param content 内容
+	 * @param requestParams 请求参数
+	 * @param result 结果
+	 * @return  行为+内容的map
 	 */
 	private Map<String, String> judgeBehavior(String behavior, String content, Map<String, Object> requestParams, Object result) {
 		Map<String, String> map = new HashMap<>();
@@ -216,5 +211,20 @@ public class VisitLogAspect {
 		map.put("remark", remark);
 		map.put("content", content);
 		return map;
+	}
+
+	@Autowired
+	public void setVisitLogService(VisitLogService visitLogService) {
+		this.visitLogService = visitLogService;
+	}
+
+	@Autowired
+	public void setVisitorService(VisitorService visitorService) {
+		this.visitorService = visitorService;
+	}
+
+	@Autowired
+	public void setRedisService(RedisService redisService) {
+		this.redisService = redisService;
 	}
 }

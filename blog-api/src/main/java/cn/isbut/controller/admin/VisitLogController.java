@@ -21,7 +21,7 @@ import cn.isbut.service.VisitLogService;
 @RestController
 @RequestMapping("/admin")
 public class VisitLogController {
-	@Autowired
+
 	VisitLogService visitLogService;
 
 	/**
@@ -31,7 +31,7 @@ public class VisitLogController {
 	 * @param date     按访问时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/visitLogs")
 	public Result visitLogs(@RequestParam(defaultValue = "") String uuid,
@@ -54,11 +54,16 @@ public class VisitLogController {
 	 * 按id删除访问日志
 	 *
 	 * @param id 日志id
-	 * @return
+	 * @return  result
 	 */
 	@DeleteMapping("/visitLog")
 	public Result delete(@RequestParam Integer id) {
 		visitLogService.deleteVisitLogById(id);
 		return Result.ok("删除成功");
+	}
+
+	@Autowired
+	public void setVisitLogService(VisitLogService visitLogService) {
+		this.visitLogService = visitLogService;
 	}
 }

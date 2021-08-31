@@ -16,14 +16,14 @@ public class RedisSerializeConfig {
 	/**
 	 * 使用JSON序列化方式
 	 *
-	 * @param redisConnectionFactory
-	 * @return
+	 * @param redisConnectionFactory redis连接创建工厂
+	 * @return RedisTemplate
 	 */
 	@Bean
 	public RedisTemplate<Object, Object> jsonRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<Object, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
-		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<Object>(Object.class);
+		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
 		template.setDefaultSerializer(serializer);
 		return template;
 	}

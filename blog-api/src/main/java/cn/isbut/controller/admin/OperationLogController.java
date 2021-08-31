@@ -20,7 +20,7 @@ import cn.isbut.service.OperationLogService;
 @RestController
 @RequestMapping("/admin")
 public class OperationLogController {
-	@Autowired
+
 	OperationLogService operationLogService;
 
 	/**
@@ -29,7 +29,7 @@ public class OperationLogController {
 	 * @param date     按操作时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/operationLogs")
 	public Result operationLogs(@RequestParam(defaultValue = "") String[] date,
@@ -51,11 +51,16 @@ public class OperationLogController {
 	 * 按id删除操作日志
 	 *
 	 * @param id 日志id
-	 * @return
+	 * @return result
 	 */
 	@DeleteMapping("/operationLog")
 	public Result delete(@RequestParam Integer id) {
 		operationLogService.deleteOperationLogById(id);
 		return Result.ok("删除成功");
+	}
+
+	@Autowired
+	public void setOperationLogService(OperationLogService operationLogService) {
+		this.operationLogService = operationLogService;
 	}
 }

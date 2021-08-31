@@ -26,7 +26,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/admin")
 public class MomentAdminController {
-	@Autowired
+
 	MomentService momentService;
 
 	/**
@@ -34,7 +34,7 @@ public class MomentAdminController {
 	 *
 	 * @param pageNum  页码
 	 * @param pageSize 每页条数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/moments")
 	public Result moments(@RequestParam(defaultValue = "1") Integer pageNum,
@@ -50,7 +50,7 @@ public class MomentAdminController {
 	 *
 	 * @param id        动态id
 	 * @param published 是否公开
-	 * @return
+	 * @return  result
 	 */
 	@OperationLogger("更新动态公开状态")
 	@PutMapping("/moment/published")
@@ -63,7 +63,7 @@ public class MomentAdminController {
 	 * 根据id查询动态
 	 *
 	 * @param id 动态id
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/moment")
 	public Result moment(@RequestParam Integer id) {
@@ -74,7 +74,7 @@ public class MomentAdminController {
 	 * 删除动态
 	 *
 	 * @param id 动态id
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("删除动态")
 	@DeleteMapping("/moment")
@@ -87,7 +87,7 @@ public class MomentAdminController {
 	 * 发布动态
 	 *
 	 * @param moment 动态实体
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("发布动态")
 	@PostMapping("/moment")
@@ -103,7 +103,7 @@ public class MomentAdminController {
 	 * 更新动态
 	 *
 	 * @param moment 动态实体
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新动态")
 	@PutMapping("/moment")
@@ -113,5 +113,10 @@ public class MomentAdminController {
 		}
 		momentService.updateMoment(moment);
 		return Result.ok("修改成功");
+	}
+
+	@Autowired
+	public void setMomentService(MomentService momentService) {
+		this.momentService = momentService;
 	}
 }

@@ -17,61 +17,61 @@ import java.util.List;
 public interface TagMapper {
 	/**
 	 * 获取所有标签List
-	 * @return
+	 * @return 标签列表
 	 */
 	List<Tag> getTagList();
 
 	/**
 	 * 获取所有标签List不查询id
-	 * @return
+	 * @return 标签列表
 	 */
 	List<Tag> getTagListNotId();
 
 	/**
 	 * 按博客id查询List
-	 * @param blogId
-	 * @return
+	 * @param blogId 标签id
+	 * @return 标签列表
 	 */
 	List<Tag> getTagListByBlogId(Integer blogId);
 
 	/**
 	 * 添加标签
-	 * @param tag
-	 * @return
+	 * @param tag 标签
+	 * @return 成功与否状态
 	 */
 	int saveTag(Tag tag);
 
 	/**
 	 * 按id查询标签
-	 * @param id
-	 * @return
+	 * @param id 标签id
+	 * @return 成功与否状态
 	 */
 	Tag getTagById(Integer id);
 
 	/**
 	 * 按名称查询标签
-	 * @param name
-	 * @return
+	 * @param name 名称
+	 * @return 标签
 	 */
 	Tag getTagByName(String name);
 
 	/**
 	 * 根据id删除标签
-	 * @param id
-	 * @return
+	 * @param id 标签id
+	 * @return 成功与否状态
 	 */
 	int deleteTagById(Integer id);
 
 	/**
 	 * 更新标签
-	 * @param tag
-	 * @return
+	 * @param tag 标签
+	 * @return 成功与否状态
 	 */
 	int updateTag(Tag tag);
 
 	/**
 	 * 得到该标签下博文数量
-	 * @return
+	 * @return 标签的博文数量
 	 */
 	List<TagBlogCount> getTagBlogCount();
 }

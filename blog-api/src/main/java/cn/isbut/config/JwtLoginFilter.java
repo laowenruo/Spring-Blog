@@ -53,6 +53,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 				throw new BadRequestException("请求方法错误");
 			}
 			User user = JacksonUtils.readValue(request.getInputStream(), User.class);
+			assert user != null;
 			currentUsername.set(user.getUsername());
 			return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		} catch (BadRequestException exception) {
@@ -73,7 +74,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 		response.setContentType("application/json;charset=utf-8");
 		User user = (User) authResult.getPrincipal();
 		user.setPassword(null);
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(2);
 		map.put("user", user);
 		map.put("token", jwt);
 		Result result = Result.ok("登录成功", map);
@@ -116,14 +117,13 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	 * @param request     请求对象
 	 * @param status      登录状态
 	 * @param description 操作描述
-	 * @return
+	 * @return 登录日志
 	 */
 	private LoginLog handleLog(HttpServletRequest request, boolean status, String description) {
 		String username = currentUsername.get();
 		currentUsername.remove();
 		String ip = IpAddressUtils.getIpAddress(request);
 		String userAgent = request.getHeader("User-Agent");
-		LoginLog log = new LoginLog(username, ip, status, description, userAgent);
-		return log;
+		return new LoginLog(username, ip, status, description, userAgent);
 	}
 }

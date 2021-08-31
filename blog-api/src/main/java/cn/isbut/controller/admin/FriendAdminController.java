@@ -26,7 +26,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 public class FriendAdminController {
-	@Autowired
+
 	FriendService friendService;
 
 	/**
@@ -34,7 +34,7 @@ public class FriendAdminController {
 	 *
 	 * @param pageNum  页码
 	 * @param pageSize 每页条数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/friends")
 	public Result friends(@RequestParam(defaultValue = "1") Integer pageNum,
@@ -50,7 +50,7 @@ public class FriendAdminController {
 	 *
 	 * @param id        友链id
 	 * @param published 是否公开
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新友链公开状态")
 	@PutMapping("/friend/published")
@@ -63,7 +63,7 @@ public class FriendAdminController {
 	 * 添加友链
 	 *
 	 * @param friend 友链DTO
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("添加友链")
 	@PostMapping("/friend")
@@ -76,7 +76,7 @@ public class FriendAdminController {
 	 * 更新友链
 	 *
 	 * @param friend 友链DTO
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新友链")
 	@PutMapping("/friend")
@@ -88,8 +88,8 @@ public class FriendAdminController {
 	/**
 	 * 按id删除友链
 	 *
-	 * @param id
-	 * @return
+	 * @param id 友链id
+	 * @return result
 	 */
 	@OperationLogger("删除友链")
 	@DeleteMapping("/friend")
@@ -101,7 +101,7 @@ public class FriendAdminController {
 	/**
 	 * 获取友链页面信息
 	 *
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/friendInfo")
 	public Result friendInfo() {
@@ -112,7 +112,7 @@ public class FriendAdminController {
 	 * 修改友链页面评论开放状态
 	 *
 	 * @param commentEnabled 是否开放评论
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("修改友链页面评论开放状态")
 	@PutMapping("/friendInfo/commentEnabled")
@@ -125,12 +125,17 @@ public class FriendAdminController {
 	 * 修改友链页面content
 	 *
 	 * @param map 包含content的JSON对象
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("修改友链页面信息")
 	@PutMapping("/friendInfo/content")
 	public Result updateFriendInfoContent(@RequestBody Map map) {
 		friendService.updateFriendInfoContent((String) map.get("content"));
 		return Result.ok("修改成功");
+	}
+
+	@Autowired
+	public void setFriendService(FriendService friendService) {
+		this.friendService = friendService;
 	}
 }

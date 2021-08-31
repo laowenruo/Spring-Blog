@@ -28,9 +28,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 public class CommentAdminController {
-	@Autowired
+
 	CommentService commentService;
-	@Autowired
+
 	BlogService blogService;
 
 	/**
@@ -40,7 +40,7 @@ public class CommentAdminController {
 	 * @param blogId   如果是博客文章页面 需要提供博客id
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/comments")
 	public Result comments(@RequestParam(defaultValue = "") Integer page,
@@ -49,7 +49,7 @@ public class CommentAdminController {
 	                       @RequestParam(defaultValue = "10") Integer pageSize) {
 		String orderBy = "create_time desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
-		List<Comment> comments = commentService.getListByPageAndParentCommentId(page, blogId, (long) -1);
+		List<Comment> comments = commentService.getListByPageAndParentCommentId(page, blogId,  -1);
 		PageInfo<Comment> pageInfo = new PageInfo<>(comments);
 		return Result.ok("请求成功", pageInfo);
 	}
@@ -57,7 +57,7 @@ public class CommentAdminController {
 	/**
 	 * 获取所有博客id和title 供评论分类的选择
 	 *
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/blogIdAndTitle")
 	public Result blogIdAndTitle() {
@@ -70,7 +70,7 @@ public class CommentAdminController {
 	 *
 	 * @param id        评论id
 	 * @param published 是否公开
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新评论公开状态")
 	@PutMapping("/comment/published")
@@ -84,7 +84,7 @@ public class CommentAdminController {
 	 *
 	 * @param id     评论id
 	 * @param notice 是否接收提醒
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新评论邮件提醒状态")
 	@PutMapping("/comment/notice")
@@ -97,7 +97,7 @@ public class CommentAdminController {
 	 * 按id删除该评论及其所有子评论
 	 *
 	 * @param id 评论id
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("删除评论")
 	@DeleteMapping("/comment")
@@ -110,7 +110,7 @@ public class CommentAdminController {
 	 * 修改评论
 	 *
 	 * @param comment 评论实体
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("修改评论")
 	@PutMapping("/comment")
@@ -120,5 +120,15 @@ public class CommentAdminController {
 		}
 		commentService.updateComment(comment);
 		return Result.ok("评论修改成功");
+	}
+
+	@Autowired
+	public void setCommentService(CommentService commentService) {
+		this.commentService = commentService;
+	}
+
+	@Autowired
+	public void setBlogService(BlogService blogService) {
+		this.blogService = blogService;
 	}
 }

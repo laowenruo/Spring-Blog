@@ -14,8 +14,8 @@ import cn.isbut.entity.User;
 public interface UserMapper {
 	/**
 	 * 按用户名查询User
-	 * @param username
-	 * @return
+	 * @param username 用户名
+	 * @return 用户
 	 */
 	User findByUsername(String username);
 }

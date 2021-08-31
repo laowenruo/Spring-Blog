@@ -16,49 +16,49 @@ import java.util.List;
 public interface FriendMapper {
 	/**
 	 * 得到友链列表
-	 * @return
+	 * @return 友链
 	 */
 	List<cn.isbut.entity.Friend> getFriendList();
 
 	/**
 	 * 得到前端展示友链
-	 * @return
+	 * @return 友链
 	 */
 	List<cn.isbut.model.vo.Friend> getFriendVOList();
 
 	/**
 	 * 通过友链id设置可见性
-	 * @param id
-	 * @param published
-	 * @return
+	 * @param id 友链id
+	 * @param published 发布状态
+	 * @return  成功与否状态
 	 */
 	int updateFriendPublishedById(Integer id, Boolean published);
 
 	/**
 	 * 保存友链
-	 * @param friend
-	 * @return
+	 * @param friend 友链
+	 * @return 成功与否状态
 	 */
 	int saveFriend(cn.isbut.entity.Friend friend);
 
 	/**
 	 * 更新友链
-	 * @param friend
-	 * @return
+	 * @param friend 友链
+	 * @return 成功与否状态
 	 */
 	int updateFriend(Friend friend);
 
 	/**
 	 * 删除友链
-	 * @param id
-	 * @return
+	 * @param id 友链id
+	 * @return 成功与否状态
 	 */
 	int deleteFriend(Integer id);
 
 	/**
 	 * 增加点击量
-	 * @param nickname
-	 * @return
+	 * @param nickname 友链名字
+	 * @return 成功与否状态
 	 */
 	int updateViewsByNickname(String nickname);
 }

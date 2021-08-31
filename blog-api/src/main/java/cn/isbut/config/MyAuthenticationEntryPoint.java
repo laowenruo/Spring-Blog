@@ -21,7 +21,7 @@ import java.io.PrintWriter;
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
-			throws IOException, ServletException {
+			throws IOException {
 		response.setContentType("application/json;charset=utf-8");
 		PrintWriter out = response.getWriter();
 		Result result = Result.create(403, "请登录");

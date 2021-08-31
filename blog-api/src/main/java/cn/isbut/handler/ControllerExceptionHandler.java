@@ -25,7 +25,7 @@ public class ControllerExceptionHandler {
 	 *
 	 * @param request 请求
 	 * @param e       自定义抛出的异常信息
-	 * @return
+	 * @return result
 	 */
 	@ExceptionHandler(NotFoundException.class)
 	public Result notFoundExceptionHandler(HttpServletRequest request, NotFoundException e) {
@@ -38,7 +38,7 @@ public class ControllerExceptionHandler {
 	 *
 	 * @param request 请求
 	 * @param e       自定义抛出的异常信息
-	 * @return
+	 * @return result
 	 */
 	@ExceptionHandler(PersistenceException.class)
 	public Result persistenceExceptionHandler(HttpServletRequest request, PersistenceException e) {
@@ -51,7 +51,7 @@ public class ControllerExceptionHandler {
 	 *
 	 * @param request 请求
 	 * @param e       自定义抛出的异常信息
-	 * @return
+	 * @return result
 	 */
 	@ExceptionHandler(UsernameNotFoundException.class)
 	public Result usernameNotFoundExceptionHandler(HttpServletRequest request, UsernameNotFoundException e) {
@@ -64,7 +64,7 @@ public class ControllerExceptionHandler {
 	 *
 	 * @param request 请求
 	 * @param e       异常信息
-	 * @return
+	 * @return result
 	 */
 	@ExceptionHandler(Exception.class)
 	public Result exceptionHandler(HttpServletRequest request, Exception e) {

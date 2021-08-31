@@ -29,7 +29,7 @@ import java.util.Map;
 @Component
 @Aspect
 public class ExceptionLogAspect {
-	@Autowired
+
     ExceptionLogService exceptionLogService;
 
 	/**
@@ -48,10 +48,11 @@ public class ExceptionLogAspect {
 	/**
 	 * 设置ExceptionLog对象属性
 	 *
-	 * @return
+	 * @return 异常日志
 	 */
 	private ExceptionLog handleLog(JoinPoint joinPoint, Exception e) {
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		assert attributes != null;
 		HttpServletRequest request = attributes.getRequest();
 		String uri = request.getRequestURI();
 		String method = request.getMethod();
@@ -79,5 +80,11 @@ public class ExceptionLogAspect {
 			return description;
 		}
 		return description;
+	}
+
+
+	@Autowired
+	public void setExceptionLogService(ExceptionLogService logService){
+		this.exceptionLogService=logService;
 	}
 }

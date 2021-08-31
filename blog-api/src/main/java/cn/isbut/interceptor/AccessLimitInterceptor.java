@@ -23,10 +23,8 @@ import java.io.PrintWriter;
 @Component
 public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
 
-	@Autowired
 	RedisService redisService;
 
-	@Autowired
 	RedisTemplate jsonRedisTemplate;
 
 	@Override
@@ -66,5 +64,15 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
 			}
 		}
 		return true;
+	}
+
+	@Autowired
+	public void setRedisService(RedisService redisService) {
+		this.redisService = redisService;
+	}
+
+	@Autowired
+	public void setJsonRedisTemplate(RedisTemplate jsonRedisTemplate) {
+		this.jsonRedisTemplate = jsonRedisTemplate;
 	}
 }

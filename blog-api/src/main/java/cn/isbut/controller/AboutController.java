@@ -14,7 +14,7 @@ import cn.isbut.service.AboutService;
  */
 @RestController
 public class AboutController {
-	@Autowired
+
 	AboutService aboutService;
 
 	/**
@@ -26,5 +26,10 @@ public class AboutController {
 	@GetMapping("/about")
 	public Result about() {
 		return Result.ok("获取成功", aboutService.getAboutInfo());
+	}
+
+	@Autowired
+	public void setAboutService(AboutService aboutService) {
+		this.aboutService = aboutService;
 	}
 }

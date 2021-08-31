@@ -20,7 +20,7 @@ import cn.isbut.service.VisitorService;
 @RestController
 @RequestMapping("/admin")
 public class VisitorAdminController {
-	@Autowired
+
 	VisitorService visitorService;
 
 	/**
@@ -29,7 +29,7 @@ public class VisitorAdminController {
 	 * @param date     按最后访问时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/visitors")
 	public Result visitors(@RequestParam(defaultValue = "") String[] date,
@@ -53,11 +53,16 @@ public class VisitorAdminController {
 	 *
 	 * @param id   访客id
 	 * @param uuid 访客uuid
-	 * @return
+	 * @return result
 	 */
 	@DeleteMapping("/visitor")
 	public Result delete(@RequestParam Integer id, @RequestParam String uuid) {
 		visitorService.deleteVisitor(id, uuid);
 		return Result.ok("删除成功");
+	}
+
+	@Autowired
+	public void setVisitorService(VisitorService visitorService) {
+		this.visitorService = visitorService;
 	}
 }

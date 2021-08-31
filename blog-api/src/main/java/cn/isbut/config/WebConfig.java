@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-	@Autowired
+
     AccessLimitInterceptor accessLimitInterceptor;
 
 	@Override
@@ -28,5 +28,10 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(accessLimitInterceptor);
+	}
+
+	@Autowired
+	public void setAccessLimitInterceptor(AccessLimitInterceptor accessLimitInterceptor) {
+		this.accessLimitInterceptor = accessLimitInterceptor;
 	}
 }

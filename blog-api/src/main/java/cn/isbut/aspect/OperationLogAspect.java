@@ -28,9 +28,10 @@ import java.util.Map;
 @Aspect
 public class OperationLogAspect {
 
-	@Autowired
     OperationLogService operationLogService;
-
+	/**
+	 * 防止多线程冲突，采用ThreadLocal，并且用完后手动释放
+	 */
 	ThreadLocal<Long> currentTime = new ThreadLocal<>();
 
 	/**
@@ -43,11 +44,11 @@ public class OperationLogAspect {
 	/**
 	 * 配置环绕通知
 	 *
-	 * @param joinPoint
-	 * @return
-	 * @throws Throwable
+	 * @param joinPoint 对象
+	 * @return 结果
+	 * @throws Throwable 异常
 	 */
-	@Around("logPointcut(operationLogger)")
+	@Around(value = "logPointcut(operationLogger)", argNames = "joinPoint,operationLogger")
 	public Object logAround(ProceedingJoinPoint joinPoint, OperationLogger operationLogger) throws Throwable {
 		currentTime.set(System.currentTimeMillis());
 		Object result = joinPoint.proceed();
@@ -62,12 +63,13 @@ public class OperationLogAspect {
 	/**
 	 * 获取HttpServletRequest请求对象，并设置OperationLog对象属性
 	 *
-	 * @param operationLogger
-	 * @param times
-	 * @return
+	 * @param operationLogger 操作日志注解
+	 * @param times 接口耗时
+	 * @return 操作日志
 	 */
 	private OperationLog handleLog(ProceedingJoinPoint joinPoint, OperationLogger operationLogger, int times) {
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		assert attributes != null;
 		HttpServletRequest request = attributes.getRequest();
 		String username = JwtUtils.getTokenBody(request.getHeader("Authorization")).getSubject();
 		String uri = request.getRequestURI();
@@ -79,5 +81,10 @@ public class OperationLogAspect {
 		Map<String, Object> requestParams = AopUtils.getRequestParams(joinPoint);
 		log.setParam(StringUtils.substring(JacksonUtils.writeValueAsString(requestParams), 0, 2000));
 		return log;
+	}
+
+	@Autowired
+	public void setOperationLogService(OperationLogService operationLogService){
+		this.operationLogService=operationLogService;
 	}
 }

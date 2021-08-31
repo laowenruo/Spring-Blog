@@ -24,22 +24,18 @@ import java.util.Map;
 @RestController
 public class IndexController {
 
-	@Autowired
 	SiteSettingService siteSettingService;
 
-	@Autowired
 	BlogService blogService;
 
-	@Autowired
 	CategoryService categoryService;
 
-	@Autowired
 	TagService tagService;
 
 	/**
 	 * 获取站点配置信息、最新推荐博客、分类列表、标签云、随机博客
 	 *
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/site")
 	public Result site() {
@@ -53,5 +49,25 @@ public class IndexController {
 		map.put("tagList", tagList);
 		map.put("randomBlogList", randomBlogList);
 		return Result.ok("请求成功", map);
+	}
+
+	@Autowired
+	public void setSiteSettingService(SiteSettingService siteSettingService) {
+		this.siteSettingService = siteSettingService;
+	}
+
+	@Autowired
+	public void setBlogService(BlogService blogService) {
+		this.blogService = blogService;
+	}
+
+	@Autowired
+	public void setCategoryService(CategoryService categoryService) {
+		this.categoryService = categoryService;
+	}
+
+	@Autowired
+	public void setTagService(TagService tagService) {
+		this.tagService = tagService;
 	}
 }

@@ -16,48 +16,48 @@ import java.util.List;
 public interface CategoryMapper {
 	/**
 	 * 获取所有分类List
-	 * @return
+	 * @return 分类
 	 */
 	List<Category> getCategoryList();
 
 	/**
 	 * 获取所有分类List不查询id
-	 * @return
+	 * @return 分类
 	 */
 	List<Category> getCategoryNameList();
 
 	/**
 	 * 添加分类
-	 * @param category
-	 * @return
+	 * @param category 分类
+	 * @return 成功与否状态
 	 */
 	int saveCategory(Category category);
 
 	/**
 	 * 按id查询分类
-	 * @param id
-	 * @return
+	 * @param id 分类id
+	 * @return 分类
 	 */
 	Category getCategoryById(Integer id);
 
 	/**
 	 * 按name查询分类
-	 * @param name
-	 * @return
+	 * @param name 分类名
+	 * @return 分类
 	 */
 	Category getCategoryByName(String name);
 
 	/**
 	 * 删除分类
-	 * @param id
-	 * @return
+	 * @param id 分类id
+	 * @return 成功与否状态
 	 */
 	int deleteCategoryById(Integer id);
 
 	/**
 	 * 更新分类
-	 * @param category
-	 * @return
+	 * @param category 分类
+	 * @return 成功与否状态
 	 */
 	int updateCategory(Category category);
 }

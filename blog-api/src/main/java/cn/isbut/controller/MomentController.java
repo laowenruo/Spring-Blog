@@ -25,10 +25,8 @@ import cn.isbut.service.impl.UserServiceImpl;
 @RestController
 public class MomentController {
 
-	@Autowired
 	MomentService momentService;
 
-	@Autowired
 	UserServiceImpl userService;
 
 	/**
@@ -36,7 +34,7 @@ public class MomentController {
 	 *
 	 * @param pageNum 页码
 	 * @param jwt     博主访问Token
-	 * @return
+	 * @return result
 	 */
 	@VisitLogger(behavior = "访问页面", content = "动态")
 	@GetMapping("/moments")
@@ -46,7 +44,7 @@ public class MomentController {
 		if (JwtUtils.judgeTokenIsExist(jwt)) {
 			try {
 				String subject = JwtUtils.getTokenBody(jwt).getSubject();
-				if (subject.startsWith("admin:")) {
+				if ("admin:".startsWith(subject)) {
 					String username = subject.replace("admin:", "");
 					User admin = (User) userService.loadUserByUsername(username);
 					if (admin != null) {
@@ -67,7 +65,7 @@ public class MomentController {
 	 * 简单限制一下点赞
 	 *
 	 * @param id 动态id
-	 * @return
+	 * @return result
 	 */
 	@AccessLimit(seconds = 86400, maxCount = 1, msg = "不可以重复点赞哦")
 	@VisitLogger(behavior = "点赞动态")
@@ -75,5 +73,15 @@ public class MomentController {
 	public Result like(@RequestParam Integer id) {
 		momentService.addLikeByMomentId(id);
 		return Result.ok("点赞成功");
+	}
+
+	@Autowired
+	public void setMomentService(MomentService momentService) {
+		this.momentService = momentService;
+	}
+
+	@Autowired
+	public void setUserService(UserServiceImpl userService) {
+		this.userService = userService;
 	}
 }

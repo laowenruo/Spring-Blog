@@ -17,7 +17,7 @@ import cn.isbut.service.BlogService;
  */
 @RestController
 public class TagController {
-	@Autowired
+
 	BlogService blogService;
 
 	/**
@@ -25,7 +25,7 @@ public class TagController {
 	 *
 	 * @param tagName 标签name
 	 * @param pageNum 页码
-	 * @return
+	 * @return result
 	 */
 	@VisitLogger(behavior = "查看标签")
 	@GetMapping("/tag")
@@ -33,5 +33,10 @@ public class TagController {
 	                  @RequestParam(defaultValue = "1") Integer pageNum) {
 		PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByTagNameAndIsPublished(tagName, pageNum);
 		return Result.ok("请求成功", pageResult);
+	}
+
+	@Autowired
+	public void setBlogService(BlogService blogService) {
+		this.blogService = blogService;
 	}
 }

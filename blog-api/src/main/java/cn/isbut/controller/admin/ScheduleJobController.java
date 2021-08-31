@@ -28,7 +28,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/admin")
 public class ScheduleJobController {
-	@Autowired
+
 	private ScheduleJobService scheduleJobService;
 
 	/**
@@ -36,7 +36,7 @@ public class ScheduleJobController {
 	 *
 	 * @param pageNum  页码
 	 * @param pageSize 每页条数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/jobs")
 	public Result jobs(@RequestParam(defaultValue = "1") Integer pageNum,
@@ -49,8 +49,8 @@ public class ScheduleJobController {
 	/**
 	 * 新建定时任务
 	 *
-	 * @param scheduleJob
-	 * @return
+	 * @param scheduleJob 定时任务对象
+	 * @return result
 	 */
 	@OperationLogger("新建定时任务")
 	@PostMapping("/job")
@@ -65,8 +65,8 @@ public class ScheduleJobController {
 	/**
 	 * 修改定时任务
 	 *
-	 * @param scheduleJob
-	 * @return
+	 * @param scheduleJob 任务类
+	 * @return  result
 	 */
 	@OperationLogger("修改定时任务")
 	@PutMapping("/job")
@@ -81,7 +81,7 @@ public class ScheduleJobController {
 	 * 删除定时任务
 	 *
 	 * @param jobId 任务id
-	 * @return
+	 * @return  result
 	 */
 	@OperationLogger("删除定时任务")
 	@DeleteMapping("/job")
@@ -94,7 +94,7 @@ public class ScheduleJobController {
 	 * 立即执行任务
 	 *
 	 * @param jobId 任务id
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("立即执行定时任务")
 	@PostMapping("/job/run")
@@ -108,7 +108,7 @@ public class ScheduleJobController {
 	 *
 	 * @param jobId  任务id
 	 * @param status 状态
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("更新任务状态")
 	@PutMapping("/job/status")
@@ -123,7 +123,7 @@ public class ScheduleJobController {
 	 * @param date     按执行时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页条数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/job/logs")
 	public Result logs(@RequestParam(defaultValue = "") String[] date,
@@ -145,11 +145,16 @@ public class ScheduleJobController {
 	 * 按id删除任务日志
 	 *
 	 * @param logId 日志id
-	 * @return
+	 * @return result
 	 */
 	@DeleteMapping("/job/log")
 	public Result delete(@RequestParam Integer logId) {
 		scheduleJobService.deleteJobLogByLogId(logId);
 		return Result.ok("删除成功");
+	}
+
+	@Autowired
+	public void setScheduleJobService(ScheduleJobService scheduleJobService) {
+		this.scheduleJobService = scheduleJobService;
 	}
 }

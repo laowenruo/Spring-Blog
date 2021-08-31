@@ -20,7 +20,7 @@ import cn.isbut.service.LoginLogService;
 @RestController
 @RequestMapping("/admin")
 public class LoginLogController {
-	@Autowired
+
 	LoginLogService loginLogService;
 
 	/**
@@ -29,7 +29,7 @@ public class LoginLogController {
 	 * @param date     按操作时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/loginLogs")
 	public Result loginLogs(@RequestParam(defaultValue = "") String[] date,
@@ -51,11 +51,16 @@ public class LoginLogController {
 	 * 按id删除登录日志
 	 *
 	 * @param id 日志id
-	 * @return
+	 * @return result
 	 */
 	@DeleteMapping("/loginLog")
 	public Result delete(@RequestParam Long id) {
 		loginLogService.deleteLoginLogById(id);
 		return Result.ok("删除成功");
+	}
+
+	@Autowired
+	public void setLoginLogService(LoginLogService loginLogService) {
+		this.loginLogService = loginLogService;
 	}
 }

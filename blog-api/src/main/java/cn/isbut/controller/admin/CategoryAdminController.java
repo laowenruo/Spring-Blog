@@ -25,9 +25,9 @@ import cn.isbut.util.StringUtils;
 @RestController
 @RequestMapping("/admin")
 public class CategoryAdminController {
-	@Autowired
+
 	BlogService blogService;
-	@Autowired
+
 	CategoryService categoryService;
 
 	/**
@@ -35,7 +35,7 @@ public class CategoryAdminController {
 	 *
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/categories")
 	public Result categories(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -49,7 +49,7 @@ public class CategoryAdminController {
 	 * 添加新分类
 	 *
 	 * @param category 分类实体
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("添加分类")
 	@PostMapping("/category")
@@ -61,7 +61,7 @@ public class CategoryAdminController {
 	 * 修改分类名称
 	 *
 	 * @param category 分类实体
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("修改分类")
 	@PutMapping("/category")
@@ -74,7 +74,7 @@ public class CategoryAdminController {
 	 *
 	 * @param category 分类实体
 	 * @param type     添加或更新
-	 * @return
+	 * @return result
 	 */
 	private Result getResult(Category category, String type) {
 		if (StringUtils.isEmpty(category.getName())) {
@@ -99,7 +99,7 @@ public class CategoryAdminController {
 	 * 按id删除分类
 	 *
 	 * @param id 分类id
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("删除分类")
 	@DeleteMapping("/category")
@@ -111,5 +111,15 @@ public class CategoryAdminController {
 		}
 		categoryService.deleteCategoryById(id);
 		return Result.ok("删除成功");
+	}
+
+	@Autowired
+	public void setBlogService(BlogService blogService) {
+		this.blogService = blogService;
+	}
+
+	@Autowired
+	public void setCategoryService(CategoryService categoryService) {
+		this.categoryService = categoryService;
 	}
 }

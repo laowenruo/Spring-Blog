@@ -26,9 +26,9 @@ import cn.isbut.util.StringUtils;
 @RestController
 @RequestMapping("/admin")
 public class TagAdminController {
-	@Autowired
+
 	BlogService blogService;
-	@Autowired
+
 	TagService tagService;
 
 	/**
@@ -36,7 +36,7 @@ public class TagAdminController {
 	 *
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/tags")
 	public Result tags(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -50,7 +50,7 @@ public class TagAdminController {
 	 * 添加新标签
 	 *
 	 * @param tag 标签实体
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("添加标签")
 	@PostMapping("/tag")
@@ -62,7 +62,7 @@ public class TagAdminController {
 	 * 修改标签
 	 *
 	 * @param tag 标签实体
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("修改标签")
 	@PutMapping("/tag")
@@ -75,7 +75,7 @@ public class TagAdminController {
 	 *
 	 * @param tag  标签实体
 	 * @param type 添加或更新
-	 * @return
+	 * @return result
 	 */
 	private Result getResult(Tag tag, String type) {
 		if (StringUtils.isEmpty(tag.getName())) {
@@ -100,7 +100,7 @@ public class TagAdminController {
 	 * 按id删除标签
 	 *
 	 * @param id 标签id
-	 * @return
+	 * @return result
 	 */
 	@OperationLogger("删除标签")
 	@DeleteMapping("/tag")
@@ -112,5 +112,15 @@ public class TagAdminController {
 		}
 		tagService.deleteTagById(id);
 		return Result.ok("删除成功");
+	}
+
+	@Autowired
+	public void setBlogService(BlogService blogService) {
+		this.blogService = blogService;
+	}
+
+	@Autowired
+	public void setTagService(TagService tagService) {
+		this.tagService = tagService;
 	}
 }

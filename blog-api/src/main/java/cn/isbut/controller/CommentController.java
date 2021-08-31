@@ -42,19 +42,19 @@ import java.util.Map;
  */
 @RestController
 public class CommentController {
-	@Autowired
+
 	CommentService commentService;
-	@Autowired
+
 	BlogService blogService;
-	@Autowired
+
 	AboutService aboutService;
-	@Autowired
+
 	UserServiceImpl userService;
-	@Autowired
+
 	FriendService friendService;
-	@Autowired
+
 	MailProperties mailProperties;
-	@Autowired
+
     MailUtils mailUtils;
 	private String blogName;
 	private String cmsUrl;
@@ -76,14 +76,14 @@ public class CommentController {
 	}
 
 	/**
-	 * 根据页面分页查询评论列表
+	 * 根据博客id页面分页查询评论列表
 	 *
 	 * @param page     页面分类（0普通文章，1关于我...）
 	 * @param blogId   如果page==0，需要博客id参数
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
 	 * @param jwt      若文章受密码保护，需要获取访问Token
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/comments")
 	public Result comments(@RequestParam Integer page,
@@ -101,7 +101,8 @@ public class CommentController {
 			if (JwtUtils.judgeTokenIsExist(jwt)) {
 				try {
 					String subject = JwtUtils.getTokenBody(jwt).getSubject();
-					if (subject.startsWith("admin:")) {//博主身份Token
+					//博主身份Token
+					if (subject.startsWith("admin:")) {
 						String username = subject.replace("admin:", "");
 						User admin = (User) userService.loadUserByUsername(username);
 						if (admin == null) {
@@ -125,9 +126,9 @@ public class CommentController {
 		}
 		Integer count = commentService.countByPageAndIsPublished(page, blogId);
 		PageHelper.startPage(pageNum, pageSize);
-		PageInfo<PageComment> pageInfo = new PageInfo<>(commentService.getPageCommentList(page, blogId, (long) -1));
+		PageInfo<PageComment> pageInfo = new PageInfo<>(commentService.getPageCommentList(page, blogId,  -1));
 		PageResult<PageComment> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(2);
 		map.put("count", count);
 		map.put("comments", pageResult);
 		return Result.ok("获取成功", map);
@@ -183,12 +184,11 @@ public class CommentController {
 	 * @param comment 评论DTO
 	 * @param request 获取ip
 	 * @param jwt     博主身份Token
-	 * @return
+	 * @return result
 	 */
 	@AccessLimit(seconds = 30, maxCount = 1, msg = "30秒内只能提交一次评论")
 	@PostMapping("/comment")
-	public Result postComment(@RequestBody Comment comment,
-	                          HttpServletRequest request,
+	public Result postComment(@RequestBody Comment comment, HttpServletRequest request,
 	                          @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
 		//评论内容合法性校验
 		if (StringUtils.isEmpty(comment.getContent()) || comment.getContent().length() > 250 ||
@@ -231,16 +231,7 @@ public class CommentController {
 					return Result.create(403, "Token已失效，请重新验证密码！");
 				}
 				//博主评论，不受密码保护限制，根据博主信息设置评论属性
-				if (subject.startsWith("admin:")) {
-					//Token验证通过，获取Token中用户名
-					String username = subject.replace("admin:", "");
-					User admin = (User) userService.loadUserByUsername(username);
-					if (admin == null) {
-						return Result.create(403, "博主身份Token已失效，请重新登录！");
-					}
-					setAdminComment(comment, request, admin);
-					isVisitorComment = false;
-				} else {
+				if (!"admin:".startsWith(subject)) {
 					//普通访客经文章密码验证后携带Token
 					//对访客的评论昵称、邮箱合法性校验
 					if (StringUtils.isEmpty(comment.getNickname(), comment.getEmail()) || comment.getNickname().length() > 15) {
@@ -254,6 +245,15 @@ public class CommentController {
 					}
 					setVisitorComment(comment, request);
 					isVisitorComment = true;
+				} else {
+					//Token验证通过，获取Token中用户名
+					String username = subject.replace("admin:", "");
+					User admin = (User) userService.loadUserByUsername(username);
+					if (admin == null) {
+						return Result.create(403, "博主身份Token已失效，请重新登录！");
+					}
+					setAdminComment(comment, request, admin);
+					isVisitorComment = false;
 				}
 			} else {
 				//不存在Token则无评论权限
@@ -352,7 +352,8 @@ public class CommentController {
 		}
 		comment.setAdminComment(false);
 		comment.setCreateTime(new Date());
-		comment.setPublished(true);//默认不需要审核
+		//默认不需要审核
+		comment.setPublished(true);
 		comment.setWebsite(website);
 		comment.setEmail(comment.getEmail().trim());
 		comment.setIp(IpAddressUtils.getIpAddress(request));
@@ -365,8 +366,10 @@ public class CommentController {
 	 */
 	private void setCommentRandomAvatar(Comment comment) {
 		//设置随机头像
-		long nicknameHash = HashUtils.getMurmurHash32(comment.getNickname());//根据评论昵称取Hash，保证每一个昵称对应一个头像
-		long num = nicknameHash % 6 + 1;//计算对应的头像
+		long nicknameHash = HashUtils.getMurmurHash32(comment.getNickname());
+		// 根据评论昵称取Hash，保证每一个昵称对应一个头像
+		long num = nicknameHash % 6 + 1;
+		//计算对应的头像
 		String avatar = "/img/comment-avatar/" + num + ".jpg";
 		comment.setAvatar(avatar);
 	}
@@ -455,7 +458,7 @@ public class CommentController {
 			title = "友人帐";
 			path = "/friends";
 		}
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(16);
 		map.put("title", title);
 		map.put("time", comment.getCreateTime());
 		map.put("nickname", comment.getNickname());
@@ -468,5 +471,40 @@ public class CommentController {
 		String toAccount = mailProperties.getUsername();
 		String subject = blogName + " 收到新评论";
 		mailUtils.sendHtmlTemplateMail(map, toAccount, subject, "owner.html");
+	}
+
+	@Autowired
+	public void setCommentService(CommentService commentService) {
+		this.commentService = commentService;
+	}
+
+	@Autowired
+	public void setBlogService(BlogService blogService) {
+		this.blogService = blogService;
+	}
+
+	@Autowired
+	public void setAboutService(AboutService aboutService) {
+		this.aboutService = aboutService;
+	}
+
+	@Autowired
+	public void setUserService(UserServiceImpl userService) {
+		this.userService = userService;
+	}
+
+	@Autowired
+	public void setFriendService(FriendService friendService) {
+		this.friendService = friendService;
+	}
+
+	@Autowired
+	public void setMailProperties(MailProperties mailProperties) {
+		this.mailProperties = mailProperties;
+	}
+
+	@Autowired
+	public void setMailUtils(MailUtils mailUtils) {
+		this.mailUtils = mailUtils;
 	}
 }
