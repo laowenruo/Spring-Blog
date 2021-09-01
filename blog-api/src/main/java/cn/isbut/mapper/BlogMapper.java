@@ -228,4 +228,12 @@ public interface BlogMapper {
 	 * @return  分类博文数量
 	 */
 	List<CategoryBlogCount> getCategoryBlogCountList();
+
+	/**
+	 * 更新博文推荐状态
+	 * @param blogId 博文id
+	 * @param recommend 推荐状态
+	 * @return 成功状态
+	 */
+    int updateBlogRecommendById(Integer blogId, Boolean recommend);
 }

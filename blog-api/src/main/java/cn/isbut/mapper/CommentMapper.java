@@ -97,4 +97,11 @@ public interface CommentMapper {
 	 * @return 成功与否状态
 	 */
 	int saveComment(Comment comment);
+
+	/**
+	 * 通过父评论查询评论
+	 * @param parentCommentId 父评论id
+	 * @return 评论
+	 */
+	List<cn.isbut.entity.Comment> getListByParentCommentId(Integer parentCommentId);
 }

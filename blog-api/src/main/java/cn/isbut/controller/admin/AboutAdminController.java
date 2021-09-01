@@ -20,13 +20,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 public class AboutAdminController {
-	@Autowired
+
 	AboutService aboutService;
 
 	/**
 	 * 获取关于我页面配置
 	 *
-	 * @return
+	 * @return result
 	 */
 	@GetMapping("/about")
 	public Result about() {
@@ -36,13 +36,18 @@ public class AboutAdminController {
 	/**
 	 * 修改关于我页面
 	 *
-	 * @param map
-	 * @return
+	 * @param map 设置map
+	 * @return result
 	 */
 	@OperationLogger("修改关于我页面")
 	@PutMapping("/about")
 	public Result updateAbout(@RequestBody Map<String, String> map) {
 		aboutService.updateAbout(map);
 		return Result.ok("修改成功");
+	}
+
+	@Autowired
+	public void setAboutService(AboutService aboutService) {
+		this.aboutService = aboutService;
 	}
 }

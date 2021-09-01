@@ -200,7 +200,7 @@ public class BlogAdminController {
 		}
 		if (cate instanceof Integer) {
 			//选择了已存在的分类
-			Category c = categoryService.getCategoryById(((Integer) cate).longValue());
+			Category c = categoryService.getCategoryById(((Integer) cate));
 			blog.setCategory(c);
 		} else if (cate instanceof String) {
 			//添加新分类
@@ -223,7 +223,7 @@ public class BlogAdminController {
 		for (Object t : tagList) {
 			if (t instanceof Integer) {
 				//选择了已存在的标签
-				Tag tag = tagService.getTagById(((Integer) t).longValue());
+				Tag tag = tagService.getTagById((Integer) t);
 				tags.add(tag);
 			} else if (t instanceof String) {
 				//添加新标签
