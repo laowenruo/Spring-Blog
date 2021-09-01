@@ -29,4 +29,7 @@ public class HashUtils {
 		return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);
 	}
 
+	public static void main(String[] args) {
+		System.out.println(getBC("Admin"));
+	}
 }

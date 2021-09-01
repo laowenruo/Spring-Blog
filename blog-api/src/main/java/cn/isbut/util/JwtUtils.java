@@ -34,7 +34,7 @@ public class JwtUtils {
 	 * 判断token是否存在
 	 *
 	 * @param token 识别码
-	 * @return 存在状态
+	 * @return 状态
 	 */
 	public static boolean judgeTokenIsExist(String token) {
 		return token != null && !"".equals(token) && !"null".equals(token);
@@ -42,9 +42,8 @@ public class JwtUtils {
 
 	/**
 	 * 生成token
-	 *
 	 * @param subject 主体
-	 * @return token
+	 * @return jwt
 	 */
 	public static String generateToken(String subject) {
 		return Jwts.builder()
@@ -59,7 +58,7 @@ public class JwtUtils {
 	 *
 	 * @param subject 主体
 	 * @param authorities 权限
-	 * @return 带权限的token
+	 * @return token
 	 */
 	public static String generateToken(String subject, Collection<? extends GrantedAuthority> authorities) {
 		StringBuilder sb = new StringBuilder();
@@ -94,7 +93,7 @@ public class JwtUtils {
 	 * 获取tokenBody同时校验token是否有效（无效则会抛出异常）
 	 *
 	 * @param token 识别码
-	 * @return 校验
+	 * @return 验证
 	 */
 	public static Claims getTokenBody(String token) {
 		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.replace("Bearer", "")).getBody();
