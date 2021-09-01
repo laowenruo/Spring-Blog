@@ -31,7 +31,7 @@ public class JwtFilter extends GenericFilterBean {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		// 对于后台管理路径外的请求直接跳过
-		if (!"/admin".startsWith(request.getRequestURI())) {
+		if (!request.getRequestURI().startsWith("/admin")) {
 			filterChain.doFilter(request, servletResponse);
 			return;
 		}
