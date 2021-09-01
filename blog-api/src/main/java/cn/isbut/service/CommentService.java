@@ -11,7 +11,7 @@ import java.util.List;
 public interface CommentService {
 	/**
 	 * 通过id和父评论id查询某页评论
-	 * @param page 页表
+	 * @param page 页面类型
 	 * @param blogId 博文id
 	 * @param parentCommentId 父评论id
 	 * @return 评论
@@ -19,8 +19,8 @@ public interface CommentService {
 	List<cn.isbut.entity.Comment> getListByPageAndParentCommentId(Integer page, Integer blogId, Integer parentCommentId);
 
 	/**
-	 * 得到分页评论
-	 * @param page 分页
+	 * 得到页面评论
+	 * @param page 页面类型
  	 * @param blogId 博文id
 	 * @param parentCommentId 父评论id
 	 * @return 分页评论
@@ -67,8 +67,8 @@ public interface CommentService {
 	void updateComment(cn.isbut.entity.Comment comment);
 
 	/**
-	 * 统计博文某页的评论
-	 * @param page 分页
+	 * 统计博文某页面类型的评论
+	 * @param page 页面类型
 	 * @param blogId 博文id
 	 * @return 分页评论
 	 */

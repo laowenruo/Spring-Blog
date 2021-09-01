@@ -54,7 +54,7 @@ public class LoginLogController {
 	 * @return result
 	 */
 	@DeleteMapping("/loginLog")
-	public Result delete(@RequestParam Long id) {
+	public Result delete(@RequestParam Integer id) {
 		loginLogService.deleteLoginLogById(id);
 		return Result.ok("删除成功");
 	}

@@ -17,7 +17,7 @@ import java.util.List;
 public interface CommentMapper {
 	/**
 	 * 按页面和父评论id查询评论List
-	 * @param page 页数
+	 * @param page 页面类型
 	 * @param blogId 博文id
 	 * @param parentCommentId 父评论id
 	 * @return 评论
@@ -27,7 +27,7 @@ public interface CommentMapper {
 	/**
 	 * 查询页面展示的评论List
 	 * @param parentCommentId 父id
-	 * @param page 页数
+	 * @param page 页面类型
 	 * @param blogId 博文id
 	 * @return 评论
 	 */
@@ -79,7 +79,7 @@ public interface CommentMapper {
 
 	/**
 	 * 按页面查询评论数量
-	 * @param page 页数
+	 * @param page 页面类型
 	 * @param blogId 博文id
 	 * @return 评论数量
 	 */

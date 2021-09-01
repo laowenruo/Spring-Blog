@@ -270,7 +270,7 @@ public class CommentController {
 					return Result.create(403, "Token已失效，请重新验证密码");
 				}
 				//博主评论，根据博主信息设置评论属性
-				if (subject.startsWith("admin:")) {
+				if ("admin:".startsWith(subject)) {
 					//Token验证通过，获取Token中用户名
 					String username = subject.replace("admin:", "");
 					User admin = (User) userService.loadUserByUsername(username);
